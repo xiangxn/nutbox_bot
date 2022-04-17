@@ -109,7 +109,7 @@ def clean(options):
     destdir.rmtree()
     path('paver-minilib.zip').remove()
     path('setup.py').remove()
-    os.system("rm -rf log/*.log")
+    os.system("rm -rf logs/*.log")
 
 
 # [[[endsection]]]
