@@ -5,6 +5,24 @@ from nutbox_bot.grpc.nutbox_bot_pb2 import BaseReply
 from nutbox_bot.grpc.nutbox_bot_pb2_grpc import add_NutboxBotServicer_to_server, NutboxBotServicer
 
 
+def check_ip(f):
+
+    def wrapper(server, request, context):
+        peer = context.peer()
+        info = peer.split(":")
+        ip = info[1]
+        if ip in server.config['whitelist']:
+            return f(server, request, context)
+        else:
+            server.logger.warning(f"Illegal access request: {peer}")
+            br = BaseReply()
+            br.code = 403
+            br.msg = "No access"
+            return br
+
+    return wrapper
+
+
 class TokenInterceptor(grpc.ServerInterceptor):
 
     def __init__(self):
@@ -17,7 +35,7 @@ class TokenInterceptor(grpc.ServerInterceptor):
     def intercept_service(self, continuation, handler_call_details):
         method_name = handler_call_details.method.split('/')
         # meta = dict(handler_call_details.invocation_metadata)
-        print(self)
+        # print(self)
         flag = False
         allows = ['PushMessage']
         if method_name[-1] in allows:
@@ -35,6 +53,7 @@ class GrpcServer(NutboxBotServicer):
         self.server = bot_server
         super().__init__()
 
+    @check_ip
     def PushMessage(self, request, context):
         br = BaseReply()
         if request.channel and request.message and self.server:
