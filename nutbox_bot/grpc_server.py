@@ -48,7 +48,8 @@ class TokenInterceptor(grpc.ServerInterceptor):
 
 class GrpcServer(NutboxBotServicer):
 
-    def __init__(self, config, bot_server) -> None:
+    def __init__(self, logger, config, bot_server) -> None:
+        self.logger = logger
         self.config = config
         self.server = bot_server
         super().__init__()

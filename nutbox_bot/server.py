@@ -49,7 +49,7 @@ class BotServer:
         self.grpc_server = grpc.server(futures.ThreadPoolExecutor(max_workers=10), interceptors=(TokenInterceptor(), ))
 
         # 将对应的任务处理函数添加到rpc server中
-        svr = GrpcServer(self.config, self)
+        svr = GrpcServer(self.logger, self.config, self)
         add_NutboxBotServicer_to_server(svr, self.grpc_server)
 
         # 这里使用的非安全接口，世界gRPC支持TLS/SSL安全连接，以及各种鉴权机制
