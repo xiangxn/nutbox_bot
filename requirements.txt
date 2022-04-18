@@ -1,1 +1,2 @@
 discord.py==1.7.3
+googleapis-common-protos==1.56.0

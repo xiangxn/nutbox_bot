@@ -27,4 +27,4 @@ config.json
 ## grpc
 include/
 nutbox_bot/grpc/
-!nutbox_bot/grpc/server.proto
+!nutbox_bot/grpc/nutbox_bot.proto
