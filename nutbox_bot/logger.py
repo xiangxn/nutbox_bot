@@ -29,17 +29,17 @@ class Logger(object):
         self.debug_handler.setFormatter(self.formatter)
         self.logger.addHandler(self.debug_handler)
 
-    def debug(self, msg, e=None, extra=None, screen=False):
+    def debug(self, msg, e=None, extra=None, screen=True):
         self.logger.debug(msg, exc_info=e, stack_info=False, extra=extra)
         if screen and self.is_debug:
             print("[{}] {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), msg), extra if extra else "")
 
-    def error(self, msg, e=None, extra=None, screen=False):
+    def error(self, msg, e=None, extra=None, screen=True):
         self.logger.error(msg, exc_info=e, stack_info=False, extra=extra)
         if screen:
             print("[{}] {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), msg), extra if extra else "")
 
-    def warning(self, msg, e=None, extra=None, screen=False):
+    def warning(self, msg, e=None, extra=None, screen=True):
         self.logger.warning(msg, exc_info=e, extra=extra)
         if screen:
             print("[{}] {}".format(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), msg), extra if extra else "")

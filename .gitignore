@@ -23,3 +23,8 @@ paver-minilib.zip
 
 config.json
 !.gitkeep
+
+## grpc
+include/
+nutbox_bot/grpc/
+!nutbox_bot/grpc/server.proto

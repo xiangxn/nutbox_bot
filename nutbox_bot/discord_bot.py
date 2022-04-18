@@ -1,9 +1,11 @@
 import discord
 
+from nutbox_bot.logger import Logger
+
 
 class DiscordBot(discord.Client):
 
-    def __init__(self, *, loop=None, logger=None, **options):
+    def __init__(self, logger: Logger, loop=None, **options):
         self.logger = logger
         self.config = options.pop("config", {"token": "", "proxy": "", "channels": {}})
         self.proxy = self.config['proxy']
@@ -14,11 +16,10 @@ class DiscordBot(discord.Client):
             super().__init__(loop=loop, **options)
 
     async def on_ready(self):
-        print('Logged on as', self.user)
+        self.logger.debug(f"Logged on as {self.user}", screen=True)
         keys = self.config['channels'].keys()
         for key in keys:
             self.channels[key] = self.get_channel(self.config['channels'][key])
-        await self.send("service-monitoring", "🟢 nutbox-bot start...")
 
     async def on_message(self, message):
         # don't respond to ourselves
@@ -31,10 +32,14 @@ class DiscordBot(discord.Client):
         if channel and channel in self.channels.keys():
             await self.channels[channel].send(msg)
         else:
-            print(f"Channel '{channel}' does not exist")
+            self.logger.warning(f"Channel '{channel}' does not exist")
 
     async def start(self, *args, **kwargs):
         return await super().start(self.config['token'], *args, **kwargs)
+
+    async def on_error(self, event_method, *args, **kwargs):
+        self.logger.error(f"event error: {event_method}", screen=True)
+        return await super().on_error(event_method, *args, **kwargs)
 
 
 if __name__ == '__main__':
