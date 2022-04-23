@@ -16,7 +16,7 @@ class DiscordBot(discord.Client):
             super().__init__(loop=loop, **options)
 
     async def on_ready(self):
-        self.logger.debug(f"Logged on as {self.user}", screen=True)
+        self.logger.debug(f"Logged on as {self.user}")
         keys = self.config['channels'].keys()
         for key in keys:
             self.channels[key] = self.get_channel(self.config['channels'][key])
@@ -38,7 +38,7 @@ class DiscordBot(discord.Client):
         return await super().start(self.config['token'], *args, **kwargs)
 
     async def on_error(self, event_method, *args, **kwargs):
-        self.logger.error(f"event error: {event_method}", screen=True)
+        self.logger.error(f"event error: {event_method}")
         return await super().on_error(event_method, *args, **kwargs)
 
 

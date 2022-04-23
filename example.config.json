@@ -1,1 +1,19 @@
-{}
+{
+    "grpc_port": 10086,
+    "token": "token...",
+    "proxy": "http://127.0.0.1:8001",
+    "channels": {
+        "service-monitoring": 963720134701223936
+    },
+    "whitelist": [
+        "127.0.0.1"
+    ],
+    "email": {
+        "host": "smtp.gmail.com",
+        "port": 587,
+        "from": "user@gmail.com",
+        "to": "touser@163.com",
+        "user": "user@gmail.com",
+        "password": "password"
+    }
+}

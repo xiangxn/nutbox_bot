@@ -19,7 +19,7 @@ class BotServer:
 
     def __init__(self, config, debug=False) -> None:
         self.config = config
-        self.logger = Logger("nutbox_bot", debug=debug)
+        self.logger = Logger("nutbox_bot", debug=debug, email=self.config['email'])
         self.monitor = None
         self.msg_queue = Queue()
         self.RUN_SYNC = True
@@ -30,7 +30,7 @@ class BotServer:
             try:
                 self.msg_queue.put_nowait(data)
             except Full as e:
-                self.logger.error("post_message error ", e=e, extra=data)
+                self.logger.error(f"post_message error: {e}")
 
     def stop(self):
         self.logger.debug("Bot Server is stopping...")
@@ -61,7 +61,7 @@ class BotServer:
             while self.RUN_SYNC:
                 time.sleep(10)
         except Exception as e:
-            self.logger.error("grpc server error: ", e=e)
+            self.logger.exception(f"grpc server error: {e}")
         finally:
             self.grpc_server.stop(0)
             self.logger.error("grpc server stop")
@@ -70,7 +70,7 @@ class BotServer:
         try:
             await loop.run_in_executor(None, self.start_grpc)
         except Exception as e:
-            self.logger.error("grpc error: ", e=e)
+            self.logger.exception(f"grpc error: {e}")
 
     async def run_monitor(self):
         intents = discord.Intents.default()
@@ -80,7 +80,7 @@ class BotServer:
             self.logger.debug("nutbox bot start...")
             await self.monitor.start()
         except Exception as e:
-            self.logger.error("nutbox bot error", e=e)
+            self.logger.exception(f"nutbox bot error: {e}")
         finally:
             self.logger.debug("nutbox bot stop...")
             if not self.monitor.is_closed():
@@ -96,7 +96,7 @@ class BotServer:
                     self.msg_queue.task_done()
                 await asyncio.sleep(1)
         except Exception as e:
-            self.logger.error("monitor message error", e=e)
+            self.logger.exception(f"monitor message error: {e}")
         finally:
             self.logger.debug("monitor_message stop...")
             if self.monitor and not self.monitor.is_closed():
