@@ -30,6 +30,8 @@ class DiscordBot(discord.Client):
 
     async def send(self, channel: str, msg: str):
         if channel and channel in self.channels.keys():
+            if not self.channels[channel]:
+                self.channels[channel] = self.get_channel(self.config['channels'][channel])
             await self.channels[channel].send(msg)
         else:
             self.logger.warning(f"Channel '{channel}' does not exist")
