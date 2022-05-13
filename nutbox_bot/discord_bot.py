@@ -19,7 +19,11 @@ class DiscordBot(discord.Client):
         self.logger.debug(f"Logged on as {self.user}")
         keys = self.config['channels'].keys()
         for key in keys:
-            self.channels[key] = self.get_channel(self.config['channels'][key])
+            ch = self.get_channel(self.config['channels'][key])
+            if ch is not None:
+                self.channels[key] = ch
+            else:
+                self.logger.warning(f"channel {key} is not found")
 
     async def on_message(self, message):
         # don't respond to ourselves
