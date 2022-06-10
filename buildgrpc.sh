@@ -33,4 +33,5 @@ echo "编译Javascript的GRPC......"
     --js_out=import_style=commonjs,binary:./nutbox_bot/grpc/js \
     --grpc_out=grpc_js:./nutbox_bot/grpc/js \
     --plugin=protoc-gen-grpc=./node_modules/.bin/grpc_tools_node_protoc_plugin \
-    ./nutbox_bot/grpc/nutbox_bot.proto
+    ./nutbox_bot/grpc/nutbox_bot.proto \
+    $GOOGLE_API/google/api/annotations.proto \
