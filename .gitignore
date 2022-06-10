@@ -28,3 +28,6 @@ config.json
 include/
 nutbox_bot/grpc/
 !nutbox_bot/grpc/nutbox_bot.proto
+
+## js
+node_modules
