@@ -88,16 +88,15 @@ class BotServer:
 
     async def monitor_message(self):
         self.logger.debug("monitor_message start...")
-        try:
-            while self.RUN_SYNC:
+        while self.RUN_SYNC:
+            try:
                 if self.monitor.is_ready() and self.msg_queue.qsize() > 0:
                     data = self.msg_queue.get()
                     await self.monitor.send(data['channel'], data['msg'])
                     self.msg_queue.task_done()
                 await asyncio.sleep(1)
-        except Exception as e:
-            self.logger.exception(f"monitor message error: {e}")
-        finally:
-            self.logger.debug("monitor_message stop...")
-            if self.monitor and not self.monitor.is_closed():
-                await self.monitor.close()
+            except Exception as e:
+                self.logger.exception(f"monitor message error: {e}")
+        self.logger.debug("monitor_message stop...")
+        if self.monitor and not self.monitor.is_closed():
+            await self.monitor.close()
